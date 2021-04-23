@@ -53,6 +53,7 @@ def reinitialiser():
     bouton_demarrer['state'] = 'normal'
     cpt_temps = 30
     message_temps.configure(text="Temps restant: " + str(cpt_temps))
+    
     #partie score
     cpt_score = 0
     message_score.config(text="Score: " + str(cpt_score))
