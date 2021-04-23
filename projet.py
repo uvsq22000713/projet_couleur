@@ -1,7 +1,13 @@
-######################
-#Version 1
-#fait par Sami
-#####################
+##################################################
+# groupe 5 MPCI TD 07
+# Sami BENIZID-MONNIER
+# Dihia HAMMADI
+# Mohand-Hedi KASHI
+# Ibrahima Ndene NDIAYE
+# Sam Khong Lucas RASAMIZANANY
+# Mohamed-Amine ZEHAR
+#https://github.com/uvsq22000713/projet_couleur
+##################################################
 
 
 import tkinter as tk 
@@ -19,29 +25,37 @@ cpt_temps = 30
 cpt_score = 0
 liste_couleurs = ["red", "blue", "green", "pink","orange", "yellow", "white"]
 liste_mots = ["Rouge", "Bleu", "Vert", "Rose","Orange", "Jaune", "Blanc"]
-
+temps_ecoule = ''
 
 #################################################################
 #fonctions
 
 def temps_restant():
     """ Fait le décompte du temps imparti (30 secondes) """
-    global cpt_temps
+    global cpt_temps, temps_ecoule
     bouton_demarrer["state"] = "disabled"  #desactivation du bouton démarrer
     message_temps.configure(text="Temps restant: " + str(cpt_temps-1))
     cpt_temps -= 1
-    temps_écoulé = racine.after(1000, temps_restant)
+    temps_ecoule = racine.after(1000, temps_restant)
+    
     
     if cpt_temps == 0:     # remet le compteur à 30 et réactive le bouton démarrer 
-        racine.after_cancel(temps_écoulé)
+        racine.after_cancel(temps_ecoule)
         cpt_temps = 30
         bouton_demarrer["state"] = "normal"
 
 
-
-        
-
-
+def reinitialiser():
+    """ Rénitialise le temps et aussi le score du joueur """
+    global cpt_temps, cpt_score
+    #partie temps
+    racine.after_cancel(temps_ecoule)
+    bouton_demarrer['state'] = 'normal'
+    cpt_temps = 30
+    message_temps.configure(text="Temps restant: " + str(cpt_temps))
+    #partie score
+    cpt_score = 0
+    message_score.config(text="Score: " + str(cpt_score))
 
 
 ################################################################################################
@@ -80,7 +94,7 @@ bouton_blanc.grid(row=5 ,column=2, columnspan=2, pady=15)
 
 #boutons demarrer et reinitialiser
 bouton_demarrer   = tk.Button(text=" Démarrer ", bg='light grey', width=20, height=2, command=temps_restant)
-bouton_reinitaliser = tk.Button(text=" Réinitialiser ", bg='light grey', width=20, height=2)
+bouton_reinitaliser = tk.Button(text=" Réinitialiser ", bg='light grey', width=20, height=2, command=reinitialiser)
 bouton_demarrer.grid(row=5, rowspan=2, column=0, pady=50)
 bouton_reinitaliser.grid(row=5,rowspan=2, column=4)
 
