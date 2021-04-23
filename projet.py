@@ -28,7 +28,7 @@ def temps_restant():
     """ Fait le décompte du temps imparti (30 secondes) """
     global cpt_temps
     bouton_demarrer["state"] = "disabled"  #desactivation du bouton démarrer
-    message_temps.configure(text="Temps restant: " + str(cpt_temps-1)s)
+    message_temps.configure(text="Temps restant: " + str(cpt_temps-1))
     cpt_temps -= 1
     temps_écoulé = racine.after(1000, temps_restant)
     
