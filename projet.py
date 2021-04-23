@@ -13,7 +13,7 @@ racine = tk.Tk()
 racine.title("Jeu de couleurs")
 
 
-#################################################################
+#################################################################  
 #constantes et listes
 cpt_temps = 30
 cpt_score = 0
@@ -32,7 +32,7 @@ def temps_restant():
     cpt_temps -= 1
     temps_écoulé = racine.after(1000, temps_restant)
     
-    if cpt_temps < 0:     # remet le compteur à 30 et réactive le bouton démarrer 
+    if cpt_temps == 0:     # remet le compteur à 30 et réactive le bouton démarrer 
         racine.after_cancel(temps_écoulé)
         cpt_temps = 30
         bouton_demarrer["state"] = "normal"
