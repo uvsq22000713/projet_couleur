@@ -28,7 +28,7 @@ cpt_score = 0
 liste_couleurs = ["red", "blue", "green", "pink","orange", "yellow", "white"]
 liste_mots = ["Rouge", "Bleu", "Vert", "Rose","Orange", "Jaune", "Blanc"]
 temps_ecoule = ''
-mot = tkFont.Font(family='Baskerville Old Face', size=18, weight='bold')
+police = tkFont.Font(family='Baskerville Old Face', size=18, weight='bold')
 texte = tkFont.Font(family='Baskerville Old Face', size=15)
 score_temps = tkFont.Font(family='Baskerville Old Face', size=14)
 bouton = tkFont.Font(family='Arial Black', weight='bold', size=9)
@@ -65,9 +65,11 @@ def reinitialiser():
     message_score.config(text="Score: " + str(cpt_score))
 
 def generateur_mots():
-    """ Génére un mot (couleur) avec une couleur aléatoire """
+    """ Génére un mot (une couleur) écrit avec une couleur aléatoire """
     global liste_couleurs, liste_mots
-    pass
+    mot = liste_mots[rd.randint(0,6)]
+    couleur = liste_couleurs[rd.randint(0,6)]
+    mots.configure(text=mot, fg=couleur)
 
 
 
@@ -85,7 +87,7 @@ message_temps = tk.Label(text="Temps restant: " + str(cpt_temps), font=score_tem
 message_temps.grid(row=2, column=0, columnspan=5)
 
 #zone d'affichage des mots
-mots = tk.Label(text= "MOTS EN COULEURS",font=mot, fg="blue", bg='gray84')
+mots = tk.Label(text= "MOTS EN COULEURS",font=police, fg="blue", bg='gray84')
 mots.grid(row=3, column=0, pady=30, columnspan=5, sticky="we")
 
 #boutons couleurs
@@ -115,7 +117,7 @@ bouton_reinitaliser.grid(row=5, rowspan=2, column=4)
 
 
 
-
+generateur_mots()
 ###############################################################
 #lancement de la fenetre principale
 
