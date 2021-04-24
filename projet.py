@@ -12,6 +12,7 @@
 
 import tkinter as tk
 import tkinter.font as tkFont
+import random as rd
 
 
 ####################################################################
@@ -62,6 +63,12 @@ def reinitialiser():
     #partie score
     cpt_score = 0
     message_score.config(text="Score: " + str(cpt_score))
+
+def generateur_mots():
+    """ Génére un mot (couleur) avec une couleur aléatoire """
+    global liste_couleurs, liste_mots
+    pass
+
 
 
 ################################################################################################
