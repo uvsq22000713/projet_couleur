@@ -31,7 +31,6 @@ temps_ecoule = ''
 mot = tkFont.Font(family='Baskerville Old Face', size=18, weight='bold')
 texte = tkFont.Font(family='Baskerville Old Face', size=18)
 score_temps = tkFont.Font(family='Baskerville Old Face', size=16)
-police = tkFont.Font(family='Baskerville Old Face', size=18, weight='bold')
 texte = tkFont.Font(family='Baskerville Old Face', size=15)
 score_temps = tkFont.Font(family='Baskerville Old Face', size=14)
 bouton = tkFont.Font(family='Arial Black', weight='bold', size=9)
@@ -86,7 +85,6 @@ message_temps = tk.Label(text="Temps restant: " + str(cpt_temps) + 's',
 
 #zone d'affichage des mots
 mots = tk.Label(text= "MOTS EN COULEURS",font=mot, fg="blue", bg='gray84')
-mots = tk.Label(text= "MOTS EN COULEURS",font=police, fg="blue", bg='gray84')
 
 #boutons couleurs
 bouton_rouge  = tk.Button(text="Rouge", font=bouton, bg="red", bd=0, height=3,
