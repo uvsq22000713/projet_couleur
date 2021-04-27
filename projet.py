@@ -38,6 +38,10 @@ demarrer_reinitialiser = tkFont.Font(family='Baskerville Old Face', size=13)
 
 #################################################################
 #fonctions
+def demarrer():
+    """ fonction sans histoire particulière"""
+    generateur_mots()
+    temps_restant()
 
 def temps_restant():
     """ Fait le décompte du temps imparti (30 secondes) """
@@ -67,10 +71,22 @@ def reinitialiser():
 
 def generateur_mots():
     """ Génére un mot (une couleur) écrit avec une couleur aléatoire """
-    global liste_couleurs, liste_mots
+    global liste_couleurs, liste_mots, couleur
     mot = liste_mots[rd.randint(0,6)]
     couleur = liste_couleurs[rd.randint(0,6)]
     mots.configure(text=mot, fg=couleur)
+    if str(couleur):
+        pass
+
+def Couleur(COULEUR):
+    """ Fonction liés à chaque boutons de couleur """
+    global cpt_score, couleur
+    if cpt_temps > 0:
+        if COULEUR == str(couleur):
+            cpt_score += 1
+            message_score.config(text="Score: " + str(cpt_score))
+            generateur_mots()
+
 
 ################################################################################################
 #création et positionnement des widgets
@@ -84,27 +100,33 @@ message_temps = tk.Label(text="Temps restant: " + str(cpt_temps) + 's',
                 font=score_temps, bg='gray84')
 
 #zone d'affichage des mots
-mots = tk.Label(text= "MOTS EN COULEURS",font=mot, fg="blue", bg='gray84')
+mots = tk.Label(text= "",font=mot, bg='gray84')
 
 #boutons couleurs
-bouton_rouge  = tk.Button(text="Rouge", font=bouton, bg="red", bd=0, height=3,
-                width= 15, activebackground='red')
-bouton_bleu   = tk.Button(text="Bleu", font=bouton, bg="blue", bd=0, height=3,
-                width= 15, activebackground='blue')
-bouton_vert   = tk.Button(text="Vert", font=bouton, bg="green", bd=0, height=3,
-                width= 15, activebackground='green')
-bouton_rose   = tk.Button(text="Rose", font=bouton, bg="pink", bd=0, height=3,
-                width= 15, activebackground='pink')
-bouton_orange = tk.Button(text="Orange", font=bouton, bg="orange", bd=0,
-                height=3, width= 15, activebackground='orange')
-bouton_jaune  = tk.Button(text="Jaune", font=bouton, bg="yellow", bd=0,
-                height=3, width= 15, activebackground='yellow')
-bouton_blanc  = tk.Button(text="Blanc", font=bouton, bg="white", bd=0,
-                height=3, width= 15)
+bouton_rouge  = tk.Button(text="Rouge", font=bouton, bg=liste_couleurs[0],
+                bd=0, height=3, width= 15, activebackground='red',
+                command=lambda: Couleur('red'))
+bouton_bleu   = tk.Button(text="Bleu", font=bouton, bg=liste_couleurs[1],
+                bd=0, height=3, width= 15, activebackground='blue',
+                command=lambda: Couleur('blue'))
+bouton_vert   = tk.Button(text="Vert", font=bouton, bg=liste_couleurs[2],
+                bd=0, height=3, width= 15, activebackground='green',
+                command=lambda: Couleur('green'))
+bouton_rose   = tk.Button(text="Rose", font=bouton, bg=liste_couleurs[3],
+                bd=0, height=3, width= 15, activebackground='pink',
+                command=lambda: Couleur('pink'))
+bouton_orange = tk.Button(text="Orange", font=bouton, bg=liste_couleurs[4],
+                bd=0, height=3, width= 15, activebackground='orange',
+                command=lambda: Couleur('orange'))
+bouton_jaune  = tk.Button(text="Jaune", font=bouton, bg=liste_couleurs[5],
+                bd=0, height=3, width= 15, activebackground='yellow',
+                command=lambda: Couleur('yellow'))
+bouton_blanc  = tk.Button(text="Blanc", font=bouton, bg=liste_couleurs[6],
+                bd=0, height=3, width= 15, command=lambda: Couleur('white'))
 
 #boutons demarrer et reinitialiser
 bouton_demarrer   = tk.Button(text=" Démarrer ", bg='gray55', width=20,
-                height=2, command=temps_restant, font=demarrer_reinitialiser,
+                height=2, command=demarrer, font=demarrer_reinitialiser,
                 activebackground='gray55')
 bouton_reinitaliser = tk.Button(text=" Réinitialiser ", bg='gray55', width=20,
                 height=2, command=reinitialiser, font=demarrer_reinitialiser,
