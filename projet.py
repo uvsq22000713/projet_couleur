@@ -12,6 +12,7 @@
 
 import tkinter as tk
 import tkinter.font as tkFont
+import random as rd
 
 
 ####################################################################
@@ -30,6 +31,9 @@ temps_ecoule = ''
 mot = tkFont.Font(family='Baskerville Old Face', size=18, weight='bold')
 texte = tkFont.Font(family='Baskerville Old Face', size=18)
 score_temps = tkFont.Font(family='Baskerville Old Face', size=16)
+police = tkFont.Font(family='Baskerville Old Face', size=18, weight='bold')
+texte = tkFont.Font(family='Baskerville Old Face', size=15)
+score_temps = tkFont.Font(family='Baskerville Old Face', size=14)
 bouton = tkFont.Font(family='Arial Black', weight='bold', size=9)
 demarrer_reinitialiser = tkFont.Font(family='Baskerville Old Face', size=13)
 
@@ -44,12 +48,10 @@ def temps_restant():
     cpt_temps -= 1
     temps_ecoule = racine.after(1000, temps_restant)
     
-    
     if cpt_temps == 0:     # remet le compteur à 30 et réactive le bouton démarrer 
         racine.after_cancel(temps_ecoule)
         cpt_temps = 30
         bouton_demarrer["state"] = "normal"
-
 
 def reinitialiser():
     """ Rénitialise le temps et aussi le score du joueur """
@@ -64,6 +66,12 @@ def reinitialiser():
     cpt_score = 0
     message_score.config(text="Score: " + str(cpt_score))
 
+def generateur_mots():
+    """ Génére un mot (une couleur) écrit avec une couleur aléatoire """
+    global liste_couleurs, liste_mots
+    mot = liste_mots[rd.randint(0,6)]
+    couleur = liste_couleurs[rd.randint(0,6)]
+    mots.configure(text=mot, fg=couleur)
 
 ################################################################################################
 #création et positionnement des widgets
@@ -78,6 +86,7 @@ message_temps = tk.Label(text="Temps restant: " + str(cpt_temps) + 's',
 
 #zone d'affichage des mots
 mots = tk.Label(text= "MOTS EN COULEURS",font=mot, fg="blue", bg='gray84')
+mots = tk.Label(text= "MOTS EN COULEURS",font=police, fg="blue", bg='gray84')
 
 #boutons couleurs
 bouton_rouge  = tk.Button(text="Rouge", font=bouton, bg="red", bd=0, height=3,
@@ -109,7 +118,7 @@ message_score.pack()
 message_temps.pack()
 
     #zone d'affichage des mots
-mots.place(x=285, y=125)
+mots.pack()
 
     #boutons couleurs
 bouton_rouge.place(x=50, y=250)
@@ -125,7 +134,6 @@ bouton_demarrer.place(x=10, y=370)
 bouton_reinitaliser.place(x=605, y=370)
 
 #messages d'informations
-
 
 
 
