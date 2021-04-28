@@ -192,7 +192,8 @@ texte1.pack()
 message_score.pack()
 message_temps.pack()
 difficulte.place(x=10, y=1)
-    #zone d'affichage des mots
+
+#zone d'affichage des mots
 mots.pack(pady=50)
 
     #boutons couleurs
