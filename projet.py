@@ -35,6 +35,7 @@ texte = tkFont.Font(family='Baskerville Old Face', size=15)
 score_temps = tkFont.Font(family='Baskerville Old Face', size=14)
 bouton = tkFont.Font(family='Arial Black', weight='bold', size=9)
 demarrer_reinitialiser = tkFont.Font(family='Baskerville Old Face', size=13)
+fichier_de_sauvegarde = open('Sauvegarde_des_scores', 'w')
 
 #################################################################
 #fonctions
@@ -55,6 +56,8 @@ def temps_restant():
         racine.after_cancel(temps_ecoule)
         cpt_temps = 30
         bouton_demarrer["state"] = "normal"
+        print('le jeu est fini!')
+        fichier_de_sauvegarde.write()
 
 def reinitialiser():
     """ Rénitialise le temps et aussi le score du joueur """
@@ -64,6 +67,7 @@ def reinitialiser():
     bouton_demarrer['state'] = 'normal'
     cpt_temps = 30
     message_temps.configure(text="Temps restant: " + str(cpt_temps) + 's')
+    mots.config(text='')
 
     #partie score
     cpt_score = 0
@@ -83,9 +87,14 @@ def Couleur(COULEUR):
     global cpt_score, couleur
     if cpt_temps > 0:
         if COULEUR == str(couleur):
-            cpt_score += 1
+            if cpt_temps > 0:
+                cpt_score += 1
+                message_score.config(text="Score: " + str(cpt_score))
+                generateur_mots()
+        else:
+            print('Mauvaise réponse')
+            cpt_score -= 1
             message_score.config(text="Score: " + str(cpt_score))
-            generateur_mots()
 
 
 ################################################################################################
@@ -153,10 +162,8 @@ bouton_blanc.place(x=425,y=335)
 bouton_demarrer.place(x=10, y=370)
 bouton_reinitaliser.place(x=605, y=370)
 
-#messages d'informations
 
-
-
+#gestion des actions de l'utilisateur
 
 
 
