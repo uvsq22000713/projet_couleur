@@ -16,36 +16,52 @@ import random as rd
 
 
 ####################################################################
+
+
 #création de la fenetre principale
 racine = tk.Tk()
 racine.config(bg='gray84')
 racine.title("Jeu de couleurs")
 
+
 #################################################################  
 #constantes et listes
 cpt_temps = 30
 cpt_score = 0
+couleur = ''
 liste_couleurs = ["red", "blue", "green", "pink","orange", "yellow", "white"]
 liste_mots = ["Rouge", "Bleu", "Vert", "Rose","Orange", "Jaune", "Blanc"]
 temps_ecoule = ''
-mot = tkFont.Font(family='Baskerville Old Face', size=18, weight='bold')
+minus_score = 0
+minus_temps = 0
+bonus_score = 1
+bonus_temps = 0
+a = True
+
+#police d'écriture
+mot = tkFont.Font(family='Baskerville Old Face', size=30, weight='bold')
 texte = tkFont.Font(family='Baskerville Old Face', size=18)
 score_temps = tkFont.Font(family='Baskerville Old Face', size=16)
 texte = tkFont.Font(family='Baskerville Old Face', size=15)
 score_temps = tkFont.Font(family='Baskerville Old Face', size=14)
 bouton = tkFont.Font(family='Arial Black', weight='bold', size=9)
-demarrer_reinitialiser = tkFont.Font(family='Baskerville Old Face', size=13)
-fichier_de_sauvegarde = open('Sauvegarde_des_scores', 'w')
-minus_score = 0
-minus_temps = 0
 difficulte = tk.Label(racine, text='Difficulté: NORMALE', font=score_temps, bg='gray84')
-bonus_score = 1
-bonus_temps = 0
+demarrer_reinitialiser = tkFont.Font(family='Baskerville Old Face', size=13)
+
+#fichiers
+fichier_de_sauvegarde = open('Sauvegarde_des_scores', 'w')
+
 
 #################################################################
+
+
 #fonctions
 def demarrer():
     """ fonction sans histoire particulière"""
+    global a, cpt_score
+    a = True
+    cpt_score = 0
+    message_score.config(text="Score: " + str(cpt_score))
     generateur_mots()
     temps_restant()
 
@@ -62,8 +78,8 @@ def temps_restant():
         racine.after_cancel(temps_ecoule)
         cpt_temps = 30
         bouton_demarrer["state"] = "normal"
-        print('le jeu est fini!')
-        fichier_de_sauvegarde.write()
+        a = False
+        mots.configure(text='')
 
 def reinitialiser():
     """ Rénitialise le temps et aussi le score du joueur """
@@ -81,39 +97,31 @@ def reinitialiser():
 
 def generateur_mots():
     """ Génére un mot (une couleur) écrit avec une couleur aléatoire """
-    global liste_couleurs, liste_mots, couleur
-    mot = liste_mots[rd.randint(0,6)]
-    couleur = liste_couleurs[rd.randint(0,6)]
-    mots.configure(text=mot, fg=couleur)
-    if str(couleur):
-        pass
-
-
+    global liste_couleurs, liste_mots, a, couleur, mot
+    if a == True: #le générateur de mot ne se lance que si a == True, c'est a dire si le temps n'est pas écoulé
+        mot = liste_mots[rd.randint(0,6)]
+        couleur = liste_couleurs[rd.randint(0,6)]
+        mots.configure(text=mot, fg=couleur)
+    else: # a == False, c'est a dire que le temps est écoulé
+        mots.configure(text='')
+        mot, couleur = '', ''
 
 def Couleur(COULEUR):
     """ Fonction liés à chaque boutons de couleur """
     global cpt_score, cpt_temps, couleur
-    if cpt_temps > 0:
-        if COULEUR == str(couleur):
-            if cpt_temps > 0:
-                cpt_score += bonus_score
-                message_score.config(text="Score: " + str(cpt_score))
-                cpt_temps += bonus_temps
-                message_temps.configure(text="Temps restant: " + str(cpt_temps) + 's')
-                generateur_mots()
-        else:
-            print('Mauvaise réponse')
-            cpt_score -= minus_score
-            cpt_temps -= minus_temps
-            message_temps.configure(text="Temps restant: " + str(cpt_temps) + 's')
-            message_score.config(text="Score: " + str(cpt_score))
+    if COULEUR == str(couleur):
+        cpt_score += bonus_score
+        message_score.config(text="Score: " + str(cpt_score))
+        cpt_temps += bonus_temps
+        message_temps.configure(text="Temps restant: " + str(cpt_temps) + 's')
+        generateur_mots()
+    else:
+        cpt_score -= minus_score
+        cpt_temps -= minus_temps
+        message_temps.configure(text="Temps restant: " + str(cpt_temps) + 's')
+        message_score.config(text="Score: " + str(cpt_score))
 
-def peaceful(event):
-    """ mets le jeu en difficulté paisible """
-    global bonus_score, bonus_temps
-    difficulte.config(text='Difficulté: NORMALE')
-    bonus_score = 3
-    bonus_temps = 2
+#fontionnalités additionnelles
 
 def easy(event):
     """ mets le jeu en difficulté facile """
@@ -144,6 +152,8 @@ def hardcore(event):
 
 
 ################################################################################################
+
+
 #création et positionnement des widgets
 #création des widgets
 
@@ -211,14 +221,18 @@ bouton_reinitaliser.place(x=605, y=370)
 
 
 #gestion des actions de l'utilisateur
-
-racine.bind('p', peaceful)
 racine.bind('e', easy)
 racine.bind('n', normal)
 racine.bind('h', hard)
 racine.bind('d', hardcore)
 
+
 ###############################################################
+
+
 #lancement de la fenetre principale
 racine.geometry('825x433')
 racine.mainloop()
+
+
+###############################################################
