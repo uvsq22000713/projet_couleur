@@ -20,6 +20,8 @@ import random as rd
 racine = tk.Tk()
 racine.config(bg='gray84')
 racine.title("Jeu de couleurs")
+racine.geometry('825x433')
+racine.maxsize(width=825, height=433)
 
 #################################################################  
 #constantes et listes
@@ -28,6 +30,8 @@ cpt_score = 0
 liste_couleurs = ["red", "blue", "green", "pink","orange", "yellow", "white"]
 liste_mots = ["Rouge", "Bleu", "Vert", "Rose","Orange", "Jaune", "Blanc"]
 temps_ecoule = ''
+
+#police d'écriture
 mot = tkFont.Font(family='Baskerville Old Face', size=18, weight='bold')
 texte = tkFont.Font(family='Baskerville Old Face', size=18)
 score_temps = tkFont.Font(family='Baskerville Old Face', size=16)
@@ -40,7 +44,7 @@ fichier_de_sauvegarde = open('Sauvegarde_des_scores', 'w')
 #################################################################
 #fonctions
 def demarrer():
-    """ fonction sans histoire particulière"""
+    """ Fonction qui lance 2 autres fonctions à partir du bouton démarrer """
     generateur_mots()
     temps_restant()
 
@@ -60,7 +64,7 @@ def temps_restant():
         fichier_de_sauvegarde.write()
 
 def reinitialiser():
-    """ Rénitialise le temps et aussi le score du joueur """
+    """ Rénitialise le temps et le score du joueur """
     global cpt_temps, cpt_score
     #partie temps
     racine.after_cancel(temps_ecoule)
@@ -72,6 +76,9 @@ def reinitialiser():
     #partie score
     cpt_score = 0
     message_score.config(text="Score: " + str(cpt_score))
+
+    #partie mots
+    mots.configure(text="")
 
 def generateur_mots():
     """ Génére un mot (une couleur) écrit avec une couleur aléatoire """
@@ -94,7 +101,7 @@ def Couleur(COULEUR):
         else:
             print('Mauvaise réponse')
             cpt_score -= 1
-            message_score.config(text="Score: " + str(cpt_score))
+            message_score.config(text="Score: " + str(cpt_score)   
 
 
 ################################################################################################
@@ -141,15 +148,15 @@ bouton_reinitaliser = tk.Button(text=" Réinitialiser ", bg='gray55', width=20,
                 height=2, command=reinitialiser, font=demarrer_reinitialiser,
                 activebackground='gray55')
 
-#positionnement des widgets
+#positionnement des messages d'informations
 texte1.pack()
 message_score.pack()
 message_temps.pack()
 
-    #zone d'affichage des mots
-mots.pack()
+#zone d'affichage des mots
+mots.pack(pady=50)
 
-    #boutons couleurs
+#position boutons couleurs
 bouton_rouge.place(x=50, y=250)
 bouton_bleu.place(x=200, y=250)
 bouton_vert.place(x=350, y=250)
@@ -158,9 +165,10 @@ bouton_orange.place(x=650, y=250)
 bouton_jaune.place(x=275, y=335)
 bouton_blanc.place(x=425,y=335)
 
-    #boutons demarrer et reinitialiser
+#position boutons demarrer et reinitialiser
 bouton_demarrer.place(x=10, y=370)
 bouton_reinitaliser.place(x=605, y=370)
+
 
 
 #gestion des actions de l'utilisateur
@@ -169,5 +177,4 @@ bouton_reinitaliser.place(x=605, y=370)
 
 ###############################################################
 #lancement de la fenetre principale
-racine.geometry('825x433')
 racine.mainloop()
