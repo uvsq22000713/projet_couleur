@@ -22,6 +22,7 @@ import random as rd
 racine = tk.Tk()
 racine.config(bg='gray84')
 racine.title("Jeu de couleurs")
+racine.iconbitmap("icone.ico")
 
 
 #################################################################  
@@ -53,11 +54,10 @@ fichier_de_sauvegarde = open('Sauvegarde_des_scores', 'w')
 
 
 #################################################################
-
-
 #fonctions
+
 def demarrer():
-    """ fonction sans histoire particulière"""
+    """ Démarre une partie de jeu """
     global a, cpt_score
     a = True
     cpt_score = 0
@@ -80,6 +80,7 @@ def temps_restant():
         bouton_demarrer["state"] = "normal"
         a = False
         mots.configure(text='')
+
 
 def reinitialiser():
     """ Rénitialise le temps et aussi le score du joueur """
@@ -105,6 +106,7 @@ def generateur_mots():
     else: # a == False, c'est a dire que le temps est écoulé
         mots.configure(text='')
         mot, couleur = '', ''
+
 
 def Couleur(COULEUR):
     """ Fonction liés à chaque boutons de couleur """
@@ -143,6 +145,7 @@ def hard(event):
     difficulte.config(text='Difficulté: DIFFICILE')
     minus_score = 2
     minus_temps = 1
+
 def hardcore(event):
     """ mets le jeu en difficulté hardcore """
     global minus_score, minus_temps
@@ -206,7 +209,7 @@ difficulte.place(x=10, y=1)
 #zone d'affichage des mots
 mots.pack(pady=50)
 
-    #boutons couleurs
+#boutons couleurs
 bouton_rouge.place(x=50, y=250)
 bouton_bleu.place(x=200, y=250)
 bouton_vert.place(x=350, y=250)
@@ -215,7 +218,7 @@ bouton_orange.place(x=650, y=250)
 bouton_jaune.place(x=275, y=335)
 bouton_blanc.place(x=425,y=335)
 
-    #boutons demarrer et reinitialiser
+#boutons demarrer et reinitialiser
 bouton_demarrer.place(x=10, y=370)
 bouton_reinitaliser.place(x=605, y=370)
 
