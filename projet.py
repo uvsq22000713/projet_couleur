@@ -16,88 +16,144 @@ import random as rd
 
 
 ####################################################################
+
+
 #création de la fenetre principale
 racine = tk.Tk()
 racine.config(bg='gray84')
 racine.title("Jeu de couleurs")
-racine.geometry('825x433')
-racine.maxsize(width=825, height=433)
+
 
 #################################################################  
 #constantes et listes
 cpt_temps = 30
 cpt_score = 0
+couleur = ''
 liste_couleurs = ["red", "blue", "green", "pink","orange", "yellow", "white"]
 liste_mots = ["Rouge", "Bleu", "Vert", "Rose","Orange", "Jaune", "Blanc"]
 temps_ecoule = ''
+minus_score = 0
+minus_temps = 0
+bonus_score = 1
+bonus_temps = 0
+a = True
 
 #police d'écriture
-mot = tkFont.Font(family='Baskerville Old Face', size=18, weight='bold')
+mot = tkFont.Font(family='Baskerville Old Face', size=30, weight='bold')
 texte = tkFont.Font(family='Baskerville Old Face', size=18)
 score_temps = tkFont.Font(family='Baskerville Old Face', size=16)
 texte = tkFont.Font(family='Baskerville Old Face', size=15)
 score_temps = tkFont.Font(family='Baskerville Old Face', size=14)
 bouton = tkFont.Font(family='Arial Black', weight='bold', size=9)
+difficulte = tk.Label(racine, text='Difficulté: NORMALE', font=score_temps, bg='gray84')
 demarrer_reinitialiser = tkFont.Font(family='Baskerville Old Face', size=13)
 
+#fichiers
+fichier_de_sauvegarde = open('Sauvegarde_des_scores', 'w')
+
+
 #################################################################
+
+
 #fonctions
 def demarrer():
-    """ Fonction qui lance 2 autres fonctions à partir du bouton démarrer """
+    """ fonction sans histoire particulière"""
+    global a, cpt_score
+    a = True
+    cpt_score = 0
+    message_score.config(text="Score: " + str(cpt_score))
     generateur_mots()
     temps_restant()
 
+
 def temps_restant():
     """ Fait le décompte du temps imparti (30 secondes) """
-    global cpt_temps, temps_ecoule
+    global cpt_temps, temps_ecoule, a
     bouton_demarrer["state"] = "disabled"  #desactivation du bouton démarrer
     message_temps.configure(text="Temps restant: " + str(cpt_temps-1) + 's')
     cpt_temps -= 1
     temps_ecoule = racine.after(1000, temps_restant)
     
-    if cpt_temps == 0:     # remet le compteur à 30 et réactive le bouton démarrer 
+    if cpt_temps == 0:     #remet le compteur à 30 et réactive le bouton démarrer 
         racine.after_cancel(temps_ecoule)
         cpt_temps = 30
         bouton_demarrer["state"] = "normal"
+        a = False
+        mots.configure(text='')
 
 def reinitialiser():
-    """ Rénitialise le temps et le score du joueur """
+    """ Rénitialise le temps et aussi le score du joueur """
     global cpt_temps, cpt_score
     #partie temps
     racine.after_cancel(temps_ecoule)
     bouton_demarrer['state'] = 'normal'
     cpt_temps = 30
     message_temps.configure(text="Temps restant: " + str(cpt_temps) + 's')
+    mots.config(text='')
 
     #partie score
     cpt_score = 0
     message_score.config(text="Score: " + str(cpt_score))
 
-    #partie mots
-    mots.configure(text="")
-
 def generateur_mots():
     """ Génére un mot (une couleur) écrit avec une couleur aléatoire """
-    global liste_couleurs, liste_mots, couleur
-    mot = liste_mots[rd.randint(0,6)]
-    couleur = liste_couleurs[rd.randint(0,6)]
-    mots.configure(text=mot, fg=couleur)
-    if str(couleur):
-        pass
+    global liste_couleurs, liste_mots, a, couleur, mot
+    if a == True: #le générateur de mot ne se lance que si a == True, c'est a dire si le temps n'est pas écoulé
+        mot = liste_mots[rd.randint(0,6)]
+        couleur = liste_couleurs[rd.randint(0,6)]
+        mots.configure(text=mot, fg=couleur)
+    else: # a == False, c'est a dire que le temps est écoulé
+        mots.configure(text='')
+        mot, couleur = '', ''
 
 def Couleur(COULEUR):
     """ Fonction liés à chaque boutons de couleur """
-    global cpt_score, couleur   
+    global cpt_score, cpt_temps, couleur
     if COULEUR == str(couleur):
-        cpt_score += 1
+        cpt_score += bonus_score
         message_score.config(text="Score: " + str(cpt_score))
+        cpt_temps += bonus_temps
+        message_temps.configure(text="Temps restant: " + str(cpt_temps) + 's')
         generateur_mots()
+    else:
+        cpt_score -= minus_score
+        cpt_temps -= minus_temps
+        message_temps.configure(text="Temps restant: " + str(cpt_temps) + 's')
+        message_score.config(text="Score: " + str(cpt_score))
 
-    
-    
+#fontionnalités additionnelles
+
+def easy(event):
+    """ mets le jeu en difficulté facile """
+    global minus_score, minus_temps
+    difficulte.config(text='Difficulté: FACILE')
+    minus_score = 2
+    minus_temps = 1
+
+def normal(event):
+    """ mets le jeu en difficulté normale """
+    global minus_score, minus_temps
+    difficulte.config(text='Difficulté: NORMALE')
+    minus_score = 1
+    minus_temps = 0
+
+def hard(event):
+    """ mets le jeu en difficulté difficile """
+    global minus_score, minus_temps
+    difficulte.config(text='Difficulté: DIFFICILE')
+    minus_score = 2
+    minus_temps = 1
+def hardcore(event):
+    """ mets le jeu en difficulté hardcore """
+    global minus_score, minus_temps
+    difficulte.config(text='Difficulté: HARDCORE')
+    minus_score = 10
+    minus_temps = 5
 
 
 ################################################################################################
+
+
 #création et positionnement des widgets
 #création des widgets
 
@@ -141,15 +197,16 @@ bouton_reinitaliser = tk.Button(text=" Réinitialiser ", bg='gray55', width=20,
                 height=2, command=reinitialiser, font=demarrer_reinitialiser,
                 activebackground='gray55')
 
-#positionnement des messages d'informations
+#positionnement des widgets
 texte1.pack()
 message_score.pack()
 message_temps.pack()
+difficulte.place(x=10, y=1)
 
 #zone d'affichage des mots
 mots.pack(pady=50)
 
-#position boutons couleurs
+    #boutons couleurs
 bouton_rouge.place(x=50, y=250)
 bouton_bleu.place(x=200, y=250)
 bouton_vert.place(x=350, y=250)
@@ -158,17 +215,24 @@ bouton_orange.place(x=650, y=250)
 bouton_jaune.place(x=275, y=335)
 bouton_blanc.place(x=425,y=335)
 
-#position boutons demarrer et reinitialiser
+    #boutons demarrer et reinitialiser
 bouton_demarrer.place(x=10, y=370)
 bouton_reinitaliser.place(x=605, y=370)
 
 
-
-
-
-
+#gestion des actions de l'utilisateur
+racine.bind('e', easy)
+racine.bind('n', normal)
+racine.bind('h', hard)
+racine.bind('d', hardcore)
 
 
 ###############################################################
+
+
 #lancement de la fenetre principale
+racine.geometry('825x433')
 racine.mainloop()
+
+
+###############################################################
