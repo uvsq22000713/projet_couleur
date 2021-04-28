@@ -30,7 +30,7 @@ cpt_score = 0
 liste_couleurs = ["red", "blue", "green", "pink","orange", "yellow", "white"]
 liste_mots = ["Rouge", "Bleu", "Vert", "Rose","Orange", "Jaune", "Blanc"]
 temps_ecoule = ''
-
+a = True
 #police d'écriture
 mot = tkFont.Font(family='Baskerville Old Face', size=18, weight='bold')
 texte = tkFont.Font(family='Baskerville Old Face', size=18)
@@ -44,21 +44,27 @@ demarrer_reinitialiser = tkFont.Font(family='Baskerville Old Face', size=13)
 #fonctions
 def demarrer():
     """ Fonction qui lance 2 autres fonctions à partir du bouton démarrer """
+    global a, cpt_score
+    a = True
+    cpt_score = 0
     generateur_mots()
     temps_restant()
 
+
 def temps_restant():
     """ Fait le décompte du temps imparti (30 secondes) """
-    global cpt_temps, temps_ecoule
+    global cpt_temps, temps_ecoule, a
     bouton_demarrer["state"] = "disabled"  #desactivation du bouton démarrer
     message_temps.configure(text="Temps restant: " + str(cpt_temps-1) + 's')
     cpt_temps -= 1
     temps_ecoule = racine.after(1000, temps_restant)
     
-    if cpt_temps == 0:     # remet le compteur à 30 et réactive le bouton démarrer 
+    if cpt_temps == 0:     #remet le compteur à 30 et réactive le bouton démarrer 
         racine.after_cancel(temps_ecoule)
         cpt_temps = 30
         bouton_demarrer["state"] = "normal"
+        a = False
+
 
 def reinitialiser():
     """ Rénitialise le temps et le score du joueur """
@@ -76,18 +82,26 @@ def reinitialiser():
     #partie mots
     mots.configure(text="")
 
+
 def generateur_mots():
     """ Génére un mot (une couleur) écrit avec une couleur aléatoire """
-    global liste_couleurs, liste_mots, couleur
-    mot = liste_mots[rd.randint(0,6)]
-    couleur = liste_couleurs[rd.randint(0,6)]
-    mots.configure(text=mot, fg=couleur)
-    if str(couleur):
-        pass
+    global liste_couleurs, liste_mots, couleur, a
+    if a == True:  #le générateur de mot ne se lance que si a == True, c'est a dire si le temps n'est pas écoulé
+        mot = liste_mots[rd.randint(0,6)]
+        couleur = liste_couleurs[rd.randint(0,6)]
+        mots.configure(text=mot, fg=couleur)
+        if str(couleur):
+            pass
+    else :  # a == False, c'est a dire que le temps est écoulé
+        mots.configure(text='')
+        mot, couleur = "", ""
+        
+
+
 
 def Couleur(COULEUR):
     """ Fonction liés à chaque boutons de couleur """
-    global cpt_score, couleur   
+    global cpt_score, couleur, a   
     if COULEUR == str(couleur):
         cpt_score += 1
         message_score.config(text="Score: " + str(cpt_score))
