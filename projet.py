@@ -46,7 +46,7 @@ score_temps = tkFont.Font(family='Baskerville Old Face', size=16)
 texte = tkFont.Font(family='Baskerville Old Face', size=15)
 score_temps = tkFont.Font(family='Baskerville Old Face', size=14)
 bouton = tkFont.Font(family='Arial Black', weight='bold', size=9)
-difficulte = tk.Label(racine, text='Difficulté: NORMALE', font=score_temps, bg='gray84')
+
 demarrer_reinitialiser = tkFont.Font(family='Baskerville Old Face', size=13)
 
 #fichiers
@@ -76,9 +76,11 @@ def temps_restant():
     
     if cpt_temps == 0:     #remet le compteur à 30 et réactive le bouton démarrer 
         racine.after_cancel(temps_ecoule)
+        a = False
+        print(cpt_score)  #test
         cpt_temps = 30
         bouton_demarrer["state"] = "normal"
-        a = False
+        
         mots.configure(text='')
 
 
@@ -98,7 +100,7 @@ def reinitialiser():
 
 def generateur_mots():
     """ Génére un mot (une couleur) écrit avec une couleur aléatoire """
-    global liste_couleurs, liste_mots, a, couleur, mot
+    global liste_couleurs, liste_mots, a, couleur
     if a == True: #le générateur de mot ne se lance que si a == True, c'est a dire si le temps n'est pas écoulé
         mot = liste_mots[rd.randint(0,6)]
         couleur = liste_couleurs[rd.randint(0,6)]
@@ -165,6 +167,8 @@ texte1 = tk.Label(text=" Tapez la couleur des mots, pas le texte des mots ! ! !"
 message_score = tk.Label(text="Score: " + str(cpt_score), font=score_temps,
                 bg='gray84')
 message_temps = tk.Label(text="Temps restant: " + str(cpt_temps) + 's',
+                font=score_temps, bg='gray84')
+difficulte    = tk.Label(racine, text='Difficulté: NORMALE', 
                 font=score_temps, bg='gray84')
 
 #zone d'affichage des mots
