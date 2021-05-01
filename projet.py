@@ -20,6 +20,7 @@ import random as rd
 
 #création de la fenetre principale
 racine = tk.Tk()
+racine.geometry('825x433')
 racine.config(bg='gray84')
 racine.title("Jeu de couleurs")
 racine.iconbitmap("icone.ico")
@@ -38,6 +39,7 @@ minus_temps = 0
 bonus_score = 1
 bonus_temps = 0
 a = True
+top10 = []
 
 #police d'écriture
 mot = tkFont.Font(family='Baskerville Old Face', size=30, weight='bold')
@@ -78,6 +80,7 @@ def temps_restant():
         racine.after_cancel(temps_ecoule)
         a = False
         print(cpt_score)  #test
+        topscore()
         cpt_temps = 30
         bouton_demarrer["state"] = "normal"
         
@@ -85,7 +88,7 @@ def temps_restant():
 
 
 def reinitialiser():
-    """ Rénitialise le temps et aussi le score du joueur """
+    """ Rénitialise le temps et le score du joueur """
     global cpt_temps, cpt_score
     #partie temps
     racine.after_cancel(temps_ecoule)
@@ -124,6 +127,20 @@ def Couleur(COULEUR):
         cpt_temps -= minus_temps
         message_temps.configure(text="Temps restant: " + str(cpt_temps) + 's')
         message_score.config(text="Score: " + str(cpt_score))
+
+def topscore():
+    """ Conserve les 10 meilleurs score dans le fichier de sauvegarde des scores """
+    global cpt_score, top10
+    top10.append(cpt_score)
+    top10.sort(reverse=True)
+    if len(top10) > 10:
+        top10.delete(top10[10])
+    print(top10)
+    for score in top10:
+        fichier_de_sauvegarde.write("{}\n".format(str(score)))
+
+
+
 
 #fontionnalités additionnelles
 
@@ -238,7 +255,7 @@ racine.bind('d', hardcore)
 
 
 #lancement de la fenetre principale
-racine.geometry('825x433')
+
 racine.mainloop()
 
 
