@@ -23,7 +23,7 @@ racine = tk.Tk()
 racine.geometry('825x433')
 racine.config(bg='gray84')
 racine.title("Jeu de couleurs")
-racine.iconbitmap("icone.ico")
+racine.iconbitmap("insérer l'emplacement du fichier icone.ico")
 
 
 #################################################################  
@@ -134,7 +134,7 @@ def topscore():
     top10.append(cpt_score)
     top10.sort(reverse=True)
     if len(top10) > 10:
-        top10.delete(top10[10])
+        top10.remove(top10[10])
     print(top10)
     for score in top10:
         fichier_de_sauvegarde.write("{}\n".format(str(score)))
