@@ -39,7 +39,7 @@ minus_temps = 0
 bonus_score = 1
 bonus_temps = 0
 a = True
-
+difficulte = ""
 
 #police d'écriture
 mot = tkFont.Font(family='Baskerville Old Face', size=30, weight='bold')
@@ -48,9 +48,7 @@ score_temps = tkFont.Font(family='Baskerville Old Face', size=16)
 texte = tkFont.Font(family='Baskerville Old Face', size=15)
 score_temps = tkFont.Font(family='Baskerville Old Face', size=14)
 bouton = tkFont.Font(family='Arial Black', weight='bold', size=9)
-
 demarrer_reinitialiser = tkFont.Font(family='Baskerville Old Face', size=13)
-
 
 
 #################################################################
@@ -78,7 +76,8 @@ def temps_restant():
         racine.after_cancel(temps_ecoule)
         a = False
         print(cpt_score)  #test
-        topscore()
+        if difficulte == "normal": # 10 meilleurs score uniquement en difficulté normale
+            topscore()
         cpt_temps = 30
         bouton_demarrer["state"] = "normal"
         
@@ -151,29 +150,33 @@ def topscore():
 
 def easy(event):
     """ mets le jeu en difficulté facile """
-    global minus_score, minus_temps
-    difficulte.config(text='Difficulté: FACILE')
+    global minus_score, minus_temps, difficulte
+    difficulte = "facile"
+    message_difficulte.config(text='Difficulté: FACILE')
     minus_score = 2
     minus_temps = 1
 
 def normal(event):
     """ mets le jeu en difficulté normale """
-    global minus_score, minus_temps
-    difficulte.config(text='Difficulté: NORMALE')
+    global minus_score, minus_temps, difficulte
+    difficulte = "normal"
+    message_difficulte.config(text='Difficulté: NORMALE')
     minus_score = 1
     minus_temps = 0
 
 def hard(event):
     """ mets le jeu en difficulté difficile """
-    global minus_score, minus_temps
-    difficulte.config(text='Difficulté: DIFFICILE')
+    global minus_score, minus_temps, difficulte
+    difficulte = "difficile"
+    message_difficulte.config(text='Difficulté: DIFFICILE')
     minus_score = 2
     minus_temps = 1
 
 def hardcore(event):
     """ mets le jeu en difficulté hardcore """
-    global minus_score, minus_temps
-    difficulte.config(text='Difficulté: HARDCORE')
+    global minus_score, minus_temps, difficulte
+    difficulte = "hardcore"
+    message_difficulte.config(text='Difficulté: HARDCORE')
     minus_score = 10
     minus_temps = 5
 
@@ -190,7 +193,7 @@ message_score = tk.Label(text="Score: " + str(cpt_score), font=score_temps,
                 bg='gray84')
 message_temps = tk.Label(text="Temps restant: " + str(cpt_temps) + 's',
                 font=score_temps, bg='gray84')
-difficulte    = tk.Label(racine, text='Difficulté: NORMALE', 
+message_difficulte = tk.Label(racine, text='Difficulté: NORMALE', 
                 font=score_temps, bg='gray84')
 
 #zone d'affichage des mots
@@ -230,7 +233,7 @@ bouton_reinitaliser = tk.Button(text=" Réinitialiser ", bg='gray55', width=20,
 texte1.pack()
 message_score.pack()
 message_temps.pack()
-difficulte.place(x=10, y=1)
+message_difficulte.place(x=10, y=1)
 
 #zone d'affichage des mots
 mots.pack(pady=50)
