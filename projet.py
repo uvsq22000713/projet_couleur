@@ -39,7 +39,7 @@ minus_temps = 0
 bonus_score = 1
 bonus_temps = 0
 a = True
-difficulte = ""
+difficulte = "normal"
 
 #police d'écriture
 mot = tkFont.Font(family='Baskerville Old Face', size=30, weight='bold')
