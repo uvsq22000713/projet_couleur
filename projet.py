@@ -23,7 +23,7 @@ racine = tk.Tk()
 racine.geometry('825x433')
 racine.config(bg='gray84')
 racine.title("Jeu de couleurs")
-racine.iconbitmap("insérer l'emplacement du fichier icone.ico")
+racine.iconbitmap("icone.ico")
 
 
 #################################################################  
@@ -39,7 +39,7 @@ minus_temps = 0
 bonus_score = 1
 bonus_temps = 0
 a = True
-top10 = []
+
 
 #police d'écriture
 mot = tkFont.Font(family='Baskerville Old Face', size=30, weight='bold')
@@ -51,8 +51,6 @@ bouton = tkFont.Font(family='Arial Black', weight='bold', size=9)
 
 demarrer_reinitialiser = tkFont.Font(family='Baskerville Old Face', size=13)
 
-#fichiers
-fichier_de_sauvegarde = open('Sauvegarde_des_scores', 'w')
 
 
 #################################################################
@@ -130,15 +128,22 @@ def Couleur(COULEUR):
 
 def topscore():
     """ Conserve les 10 meilleurs score dans le fichier de sauvegarde des scores """
-    global cpt_score, top10
+    global cpt_score
+
+    fic = open('Sauvegarde_des_scores', 'r')
+    top10 = [int(ligne) for ligne in fic]
+    fic.close()
+
     top10.append(cpt_score)
     top10.sort(reverse=True)
-    if len(top10) > 10:
-        top10.remove(top10[10])
+    while len(top10) > 10:
+        top10.pop(10)
     print(top10)
-    for score in top10:
-        fichier_de_sauvegarde.write("{}\n".format(str(score)))
 
+    fic = open('Sauvegarde_des_scores', 'w')
+    for score in top10:
+        fic.write("{}\n".format(str(score)))
+    fic.close()
 
 
 
