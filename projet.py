@@ -10,9 +10,11 @@
 ##################################################
 
 
+from os import truncate
 import tkinter as tk
 import tkinter.font as tkFont
 import random as rd
+from tkinter.constants import LEFT, TRUE
 
 
 ####################################################################
@@ -23,14 +25,13 @@ racine = tk.Tk()
 racine.geometry('825x433')
 racine.config(bg='gray84')
 racine.title("Jeu de couleurs")
-racine.iconbitmap("insérer l'emplacement du fichier icone.ico")
+racine.iconbitmap('D:\Lucas\L1MPCI\S2\LSIN200\Projets\Couleurs\projet_couleur-1\icone.ico')
 
 
 #################################################################  
 #constantes et listes
 cpt_temps = 30
 cpt_score = 0
-couleur = ''
 liste_couleurs = ["red", "blue", "green", "pink","orange", "yellow", "white"]
 liste_mots = ["Rouge", "Bleu", "Vert", "Rose","Orange", "Jaune", "Blanc"]
 temps_ecoule = ''
@@ -39,21 +40,23 @@ minus_temps = 0
 bonus_score = 1
 bonus_temps = 0
 a = True
-top10 = []
+difficulte = "normal"
+compteur = 0
+listeIntermediaire = []
+verif = True
+liste_1, liste_2= [], []
+cpt = 0
+mini_liste=[]
+liste_verif = []
 
 #police d'écriture
 mot = tkFont.Font(family='Baskerville Old Face', size=30, weight='bold')
-texte = tkFont.Font(family='Baskerville Old Face', size=18)
+texte = tkFont.Font(family='Baskerville Old Face', size=16)
 score_temps = tkFont.Font(family='Baskerville Old Face', size=16)
-texte = tkFont.Font(family='Baskerville Old Face', size=15)
-score_temps = tkFont.Font(family='Baskerville Old Face', size=14)
+texte_1 = tkFont.Font(family='Baskerville Old Face', size=19, weight='bold')
+diff = tkFont.Font(family='Baskerville Old Face', size=14)
 bouton = tkFont.Font(family='Arial Black', weight='bold', size=9)
-
 demarrer_reinitialiser = tkFont.Font(family='Baskerville Old Face', size=13)
-
-#fichiers
-fichier_de_sauvegarde = open('Sauvegarde_des_scores', 'w')
-
 
 #################################################################
 #fonctions
@@ -67,7 +70,6 @@ def demarrer():
     generateur_mots()
     temps_restant()
 
-
 def temps_restant():
     """ Fait le décompte du temps imparti (30 secondes) """
     global cpt_temps, temps_ecoule, a
@@ -80,65 +82,95 @@ def temps_restant():
         racine.after_cancel(temps_ecoule)
         a = False
         print(cpt_score)  #test
-        topscore()
+        if difficulte == "normal": # 10 meilleurs score uniquement en difficulté normale
+            topscore()
         cpt_temps = 30
         bouton_demarrer["state"] = "normal"
-        
-        mots.configure(text='')
-
 
 def reinitialiser():
     """ Rénitialise le temps et le score du joueur """
-    global cpt_temps, cpt_score
+    global cpt_temps, cpt_score, verif
     #partie temps
     racine.after_cancel(temps_ecoule)
     bouton_demarrer['state'] = 'normal'
     cpt_temps = 30
     message_temps.configure(text="Temps restant: " + str(cpt_temps) + 's')
-    mots.config(text='')
 
     #partie score
     cpt_score = 0
     message_score.config(text="Score: " + str(cpt_score))
 
+    #listes
+    suppr_liste()
+    modif_bouton()
+
+def modif_bouton():
+    ''' modifie l'état des boutons '''
+    bouton_rouge.configure(border=0)
+    bouton_bleu.configure(border=0)
+    bouton_vert.configure(border=0)
+    bouton_rose.configure(border=0)
+    bouton_orange.configure(border=0)
+    bouton_jaune.configure(border=0)
+    bouton_blanc.configure(border=0)
+
+def suppr_liste():
+    ''' renitialise les listes impliqués dans la génération des mots '''
+    ecran.destroy()
+    liste_verif.clear()
+    mini_liste.clear()
+    liste_1.clear()
+    liste_2.clear()
+
 def generateur_mots():
     """ Génére un mot (une couleur) écrit avec une couleur aléatoire """
-    global liste_couleurs, liste_mots, a, couleur
-    if a == True: #le générateur de mot ne se lance que si a == True, c'est a dire si le temps n'est pas écoulé
-        mot = liste_mots[rd.randint(0,6)]
-        couleur = liste_couleurs[rd.randint(0,6)]
-        mots.configure(text=mot, fg=couleur)
-    else: # a == False, c'est a dire que le temps est écoulé
-        mots.configure(text='')
-        mot, couleur = '', ''
-
-
-def Couleur(COULEUR):
-    """ Fonction liés à chaque boutons de couleur """
-    global cpt_score, cpt_temps, couleur
-    if COULEUR == str(couleur):
-        cpt_score += bonus_score
-        message_score.config(text="Score: " + str(cpt_score))
-        cpt_temps += bonus_temps
-        message_temps.configure(text="Temps restant: " + str(cpt_temps) + 's')
-        generateur_mots()
+    global a, listeIntermediaire, compteur, verif, ecran
+    #le générateur de mot ne se lance que si a == True, c'est a dire si le temps n'est pas écoulé
+    if a:
+        if verif:
+            compteur = rd.randint(2,6)
+            ecran = tk.Canvas(racine)
+            ecran.place(x=400, y=150, anchor='center')
+            for i in range(compteur):
+                liste_1.append(liste_couleurs[rd.randint(0,5)]) #liste avec les couleurs pour les fg des mots
+                liste_2.append(liste_mots[rd.randint(0,5)]) #liste qui contient les mots pour la partie text
+                listeIntermediaire = [liste_2[i], liste_1[i]]
+                mini_liste.append(listeIntermediaire)
+            for tc in mini_liste:
+                tk.Label(ecran, text=tc[0] + '   ', fg=tc[1],
+                font=texte_1, bg='gray84').pack(side = LEFT)
+        else:
+            suppr_liste()
+            verif = True
     else:
-        cpt_score -= minus_score
-        cpt_temps -= minus_temps
-        message_temps.configure(text="Temps restant: " + str(cpt_temps) + 's')
-        message_score.config(text="Score: " + str(cpt_score))
+        suppr_liste()
+        modif_bouton()
+        ecran.destroy()
+
+def Couleur(COULEUR, bouton):
+    """ Fonction liés à chaque boutons de couleur """
+    global liste_verif, cpt_score, cpt_temps, liste_1
+    liste_1.sort()
+    if len(liste_verif) < len(liste_1):        
+        bouton.configure(border=2, highlightbackground='black')
+        liste_verif.append(COULEUR)
+        print(liste_verif)
+        
 
 def topscore():
     """ Conserve les 10 meilleurs score dans le fichier de sauvegarde des scores """
-    global cpt_score, top10
+    global cpt_score
+    fic = open('Sauvegarde_des_scores', 'r')
+    top10 = [int(ligne) for ligne in fic]
+    fic.close()
     top10.append(cpt_score)
     top10.sort(reverse=True)
     if len(top10) > 10:
-        top10.remove(top10[10])
-    print(top10)
+        top10.pop(10)
+    fic = open('Sauvegarde_des_scores', 'w')
     for score in top10:
-        fichier_de_sauvegarde.write("{}\n".format(str(score)))
-
+        fic.write("{}\n".format(str(score)))
+    fic.close()
 
 
 
@@ -146,29 +178,33 @@ def topscore():
 
 def easy(event):
     """ mets le jeu en difficulté facile """
-    global minus_score, minus_temps
-    difficulte.config(text='Difficulté: FACILE')
+    global minus_score, minus_temps, difficulte
+    difficulte = "facile"
+    message_difficulte.config(text='Difficulté: FACILE')
     minus_score = 2
     minus_temps = 1
 
 def normal(event):
     """ mets le jeu en difficulté normale """
-    global minus_score, minus_temps
-    difficulte.config(text='Difficulté: NORMALE')
+    global minus_score, minus_temps, difficulte
+    difficulte = "normal"
+    message_difficulte.config(text='Difficulté: NORMALE')
     minus_score = 1
     minus_temps = 0
 
 def hard(event):
     """ mets le jeu en difficulté difficile """
-    global minus_score, minus_temps
-    difficulte.config(text='Difficulté: DIFFICILE')
+    global minus_score, minus_temps, difficulte
+    difficulte = "difficile"
+    message_difficulte.config(text='Difficulté: DIFFICILE')
     minus_score = 2
     minus_temps = 1
 
 def hardcore(event):
     """ mets le jeu en difficulté hardcore """
-    global minus_score, minus_temps
-    difficulte.config(text='Difficulté: HARDCORE')
+    global minus_score, minus_temps, difficulte
+    difficulte = "hardcore"
+    message_difficulte.config(text='Difficulté: HARDCORE')
     minus_score = 10
     minus_temps = 5
 
@@ -185,33 +221,33 @@ message_score = tk.Label(text="Score: " + str(cpt_score), font=score_temps,
                 bg='gray84')
 message_temps = tk.Label(text="Temps restant: " + str(cpt_temps) + 's',
                 font=score_temps, bg='gray84')
-difficulte    = tk.Label(racine, text='Difficulté: NORMALE', 
-                font=score_temps, bg='gray84')
+message_difficulte = tk.Label(racine, text='Difficulté: NORMALE', 
+                font=diff, bg='gray84')
 
 #zone d'affichage des mots
-mots = tk.Label(text= "",font=mot, bg='gray84')
+ecran = tk.Canvas(racine, height= 30, bg='gray84', highlightbackground='gray84')
 
 #boutons couleurs
 bouton_rouge  = tk.Button(text="Rouge", font=bouton, bg=liste_couleurs[0],
                 bd=0, height=3, width= 15, activebackground='red',
-                command=lambda: Couleur('red'))
+                command=lambda: Couleur('red', bouton_rouge))
 bouton_bleu   = tk.Button(text="Bleu", font=bouton, bg=liste_couleurs[1],
                 bd=0, height=3, width= 15, activebackground='blue',
-                command=lambda: Couleur('blue'))
+                command=lambda: Couleur('blue', bouton_bleu))
 bouton_vert   = tk.Button(text="Vert", font=bouton, bg=liste_couleurs[2],
                 bd=0, height=3, width= 15, activebackground='green',
-                command=lambda: Couleur('green'))
+                command=lambda: Couleur('green', bouton_vert))
 bouton_rose   = tk.Button(text="Rose", font=bouton, bg=liste_couleurs[3],
                 bd=0, height=3, width= 15, activebackground='pink',
-                command=lambda: Couleur('pink'))
+                command=lambda: Couleur('pink', bouton_rose))
 bouton_orange = tk.Button(text="Orange", font=bouton, bg=liste_couleurs[4],
                 bd=0, height=3, width= 15, activebackground='orange',
-                command=lambda: Couleur('orange'))
+                command=lambda: Couleur('orange', bouton_orange))
 bouton_jaune  = tk.Button(text="Jaune", font=bouton, bg=liste_couleurs[5],
                 bd=0, height=3, width= 15, activebackground='yellow',
-                command=lambda: Couleur('yellow'))
+                command=lambda: Couleur('yellow', bouton_jaune))
 bouton_blanc  = tk.Button(text="Blanc", font=bouton, bg=liste_couleurs[6],
-                bd=0, height=3, width= 15, command=lambda: Couleur('white'))
+                bd=0, height=3, width= 15, command=lambda: Couleur('white', bouton_blanc))
 
 #boutons demarrer et reinitialiser
 bouton_demarrer   = tk.Button(text=" Démarrer ", bg='gray55', width=20,
@@ -225,10 +261,10 @@ bouton_reinitaliser = tk.Button(text=" Réinitialiser ", bg='gray55', width=20,
 texte1.pack()
 message_score.pack()
 message_temps.pack()
-difficulte.place(x=10, y=1)
+message_difficulte.place(x=10, y=1)
 
 #zone d'affichage des mots
-mots.pack(pady=50)
+ecran.pack(pady=50)
 
 #boutons couleurs
 bouton_rouge.place(x=50, y=250)
