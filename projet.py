@@ -25,26 +25,31 @@ racine = tk.Tk()
 racine.geometry('825x433')
 racine.config(bg='gray84')
 racine.title("Jeu de couleurs")
-racine.iconbitmap('mettre le chemin du fichier icone.ico')
+racine.iconbitmap('D:\Lucas\L1MPCI\S2\LSIN200\Projets\Couleurs\projet_couleur-1\icone.ico')
 
 
 #################################################################  
 #constantes et listes
-cpt_temps = 30
-cpt_score = 0
+
+    #listes
 liste_couleurs = ["red", "blue", "green", "pink","orange", "yellow", "white"]
 liste_mots = ["Rouge", "Bleu", "Vert", "Rose","Orange", "Jaune", "Blanc"]
+liste_1, liste_2= [], []
+listeIntermediaire = []
+
+    #variables
+minus_score, minus_temps, bonus_score, bonus_temps = 0, 0, 0, 0
+cpt_temps, cpt_score = 30, 0
 temps_ecoule = ''
-minus_score = 0
-minus_temps = 0
-bonus_score = 1
-bonus_temps = 0
-a = True
 difficulte = "normal"
 compteur = 0
-listeIntermediaire = []
-verif = True
-liste_1, liste_2= [], []
+
+    #bool
+verif_temps = True
+
+
+
+
 cpt = 0
 mini_liste=[]
 liste_verif = []
@@ -63,8 +68,8 @@ demarrer_reinitialiser = tkFont.Font(family='Baskerville Old Face', size=13)
 
 def demarrer():
     """ Démarre une partie de jeu """
-    global a, cpt_score
-    a = True
+    global verif_temps, cpt_score
+    verif_temps = True
     cpt_score = 0
     message_score.config(text="Score: " + str(cpt_score))
     generateur_mots()
@@ -124,38 +129,52 @@ def suppr_liste():
 
 def generateur_mots():
     """ Génére un mot (une couleur) écrit avec une couleur aléatoire """
-    global a, listeIntermediaire, compteur, verif, ecran
+    global verif_temps, listeIntermediaire, compteur, ecran
     #le générateur de mot ne se lance que si a == True, c'est a dire si le temps n'est pas écoulé
-    if a:
-        if verif:
-            compteur = rd.randint(2,6)
-            ecran = tk.Canvas(racine)
-            ecran.place(x=400, y=150, anchor='center')
-            for i in range(compteur):
-                liste_1.append(liste_couleurs[rd.randint(0,5)]) #liste avec les couleurs pour les fg des mots
-                liste_2.append(liste_mots[rd.randint(0,5)]) #liste qui contient les mots pour la partie text
-                listeIntermediaire = [liste_2[i], liste_1[i]]
-                mini_liste.append(listeIntermediaire)
-            for tc in mini_liste:
-                tk.Label(ecran, text=tc[0] + '   ', fg=tc[1],
-                font=texte_1, bg='gray84').pack(side = LEFT)
-        else:
-            suppr_liste()
-            verif = True
+    if verif_temps:
+        compteur = rd.randint(2,6)
+        ecran = tk.Canvas(racine)
+        ecran.place(x=400, y=150, anchor='center')
+        for i in range(compteur):
+            liste_1.append(liste_couleurs[rd.randint(0,5)]) #liste avec les couleurs pour les fg des mots
+            liste_2.append(liste_mots[rd.randint(0,5)]) #liste qui contient les mots pour la partie text
+            listeIntermediaire = [liste_2[i], liste_1[i]]
+            mini_liste.append(listeIntermediaire)
+        for tc in mini_liste:
+            tk.Label(ecran, text=tc[0] + '   ', fg=tc[1],
+            font=texte_1, bg='gray84').pack(side = LEFT)
     else:
+        for nom in bouton: #désactive les bouton une fois que le temps est écoulé
+            nom.configure(state=tk.DISABLED)    
         suppr_liste()
         modif_bouton()
         ecran.destroy()
 
+
 def Couleur(COULEUR, bouton):
     """ Fonction liés à chaque boutons de couleur """
-    global liste_verif, cpt_score, cpt_temps, liste_1
-    liste_1.sort()
+    global liste_verif, cpt_score, cpt_temps
     if len(liste_verif) < len(liste_1):        
         bouton.configure(border=2, highlightbackground='black')
         liste_verif.append(COULEUR)
         print(liste_verif)
-        
+
+    elif len(liste_verif) == len(liste_1):
+        if liste_verif == liste_1:
+            cpt_score += bonus_score
+            message_score.config(text="Score: " + str(cpt_score))
+            cpt_temps += bonus_temps
+            message_temps.configure(text="Temps restant: " + str(cpt_temps) + 's')
+            modif_bouton()
+            suppr_liste()
+            generateur_mots()
+        else:
+            cpt_score -= minus_score
+            cpt_temps -= minus_temps
+            message_temps.configure(text="Temps restant: " + str(cpt_temps) + 's')
+            message_score.config(text="Score: " + str(cpt_score))
+            liste_verif.clear()
+            modif_bouton()
 
 def topscore():
     """ Conserve les 10 meilleurs score dans le fichier de sauvegarde des scores """
@@ -168,11 +187,10 @@ def topscore():
     if len(top10) > 10:
         top10.pop(10)
     fic = open('Sauvegarde_des_scores', 'w')
+
     for score in top10:
         fic.write("{}\n".format(str(score)))
     fic.close()
-
-
 
 #fontionnalités additionnelles
 
@@ -207,6 +225,12 @@ def hardcore(event):
     message_difficulte.config(text='Difficulté: HARDCORE')
     minus_score = 10
     minus_temps = 5
+
+def resetScore(event):
+    ''' reinitialise le score du joueur dans le fichier sauvegarde '''
+    fic = open('Sauvegarde_des_scores', 'w')
+    fic.close()
+    print('Scores réinitialisés')
 
 
 ################################################################################################
@@ -249,6 +273,10 @@ bouton_jaune  = tk.Button(text="Jaune", font=bouton, bg=liste_couleurs[5],
 bouton_blanc  = tk.Button(text="Blanc", font=bouton, bg=liste_couleurs[6],
                 bd=0, height=3, width= 15, command=lambda: Couleur('white', bouton_blanc))
 
+#liste simple contenant les noms des boutons
+boutons = [bouton_blanc, bouton_bleu, bouton_jaune, bouton_orange, bouton_rose,
+            bouton_rouge, bouton_vert]
+
 #boutons demarrer et reinitialiser
 bouton_demarrer   = tk.Button(text=" Démarrer ", bg='gray55', width=20,
                 height=2, command=demarrer, font=demarrer_reinitialiser,
@@ -285,6 +313,7 @@ racine.bind('e', easy)
 racine.bind('n', normal)
 racine.bind('h', hard)
 racine.bind('d', hardcore)
+racine.bind('r', resetScore)
 
 
 ###############################################################
