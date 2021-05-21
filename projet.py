@@ -25,7 +25,7 @@ racine = tk.Tk()
 racine.geometry('825x433')
 racine.config(bg='gray84')
 racine.title("Jeu de couleurs")
-racine.iconbitmap('mettre le chemin du fichier icone.ico')
+racine.iconbitmap('D:\Lucas\L1MPCI\S2\LSIN200\Projets\Couleurs\projet_couleur-1\icone.ico')
 
 
 #################################################################  
@@ -38,7 +38,7 @@ liste_1, liste_2= [], []
 listeIntermediaire = []
 
     #variables
-minus_score, minus_temps, bonus_score, bonus_temps = 0, 0, 0, 0
+minus_score, minus_temps, bonus_score, bonus_temps = 0, 0, 1, 0
 cpt_temps, cpt_score = 30, 0
 temps_ecoule = ''
 difficulte = "normal"
@@ -77,7 +77,7 @@ def demarrer():
 
 def temps_restant():
     """ Fait le décompte du temps imparti (30 secondes) """
-    global cpt_temps, temps_ecoule, a
+    global cpt_temps, temps_ecoule, verif_temps
     bouton_demarrer["state"] = "disabled"  #desactivation du bouton démarrer
     message_temps.configure(text="Temps restant: " + str(cpt_temps-1) + 's')
     cpt_temps -= 1
@@ -85,8 +85,10 @@ def temps_restant():
     
     if cpt_temps == 0:     #remet le compteur à 30 et réactive le bouton démarrer 
         racine.after_cancel(temps_ecoule)
-        a = False
-        print(cpt_score)  #test
+        verif_temps = False
+        for nom in bouton: #désactive les bouton une fois que le temps est écoulé
+            nom.configure(state=tk.DISABLED)  
+        print('Votre score est :' + str(cpt_score))  #test
         if difficulte == "normal": # 10 meilleurs score uniquement en difficulté normale
             topscore()
         cpt_temps = 30
@@ -94,7 +96,7 @@ def temps_restant():
 
 def reinitialiser():
     """ Rénitialise le temps et le score du joueur """
-    global cpt_temps, cpt_score, verif
+    global cpt_temps, cpt_score
     #partie temps
     racine.after_cancel(temps_ecoule)
     bouton_demarrer['state'] = 'normal'
@@ -129,9 +131,8 @@ def suppr_liste():
 
 def generateur_mots():
     """ Génére un mot (une couleur) écrit avec une couleur aléatoire """
-    global verif_temps, listeIntermediaire, compteur, ecran
-    #le générateur de mot ne se lance que si a == True, c'est a dire si le temps n'est pas écoulé
-    if verif_temps:
+    global verif_temps, listeIntermediaire, compteur, ecran, bouton
+    if verif_temps: #le générateur de mot ne se lance que si a == True, c'est a dire si le temps n'est pas écoulé
         compteur = rd.randint(2,6)
         ecran = tk.Canvas(racine)
         ecran.place(x=400, y=150, anchor='center')
@@ -143,9 +144,7 @@ def generateur_mots():
         for tc in mini_liste:
             tk.Label(ecran, text=tc[0] + '   ', fg=tc[1],
             font=texte_1, bg='gray84').pack(side = LEFT)
-    else:
-        for nom in bouton: #désactive les bouton une fois que le temps est écoulé
-            nom.configure(state=tk.DISABLED)    
+    else:  
         suppr_liste()
         modif_bouton()
         ecran.destroy()
@@ -196,19 +195,20 @@ def topscore():
 
 def easy(event):
     """ mets le jeu en difficulté facile """
-    global minus_score, minus_temps, difficulte
+    global bonus_score, bonus_temps, difficulte
     difficulte = "facile"
     message_difficulte.config(text='Difficulté: FACILE')
-    minus_score = 2
-    minus_temps = 1
+    bonus_score = 2
+    bonus_temps = 1
 
 def normal(event):
     """ mets le jeu en difficulté normale """
-    global minus_score, minus_temps, difficulte
+    global minus_score, minus_temps, difficulte, bonus_score
     difficulte = "normal"
     message_difficulte.config(text='Difficulté: NORMALE')
     minus_score = 1
     minus_temps = 0
+    bonus_score = 1
 
 def hard(event):
     """ mets le jeu en difficulté difficile """
