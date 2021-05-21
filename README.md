@@ -10,3 +10,5 @@ Dans le jeu, vous pourriez choisir votre propre difficulté selon vos envies. Il
 -difficile : ce mode de jeu est pour les joueurs les plus audacieux car en cas de mauvaise réponses vous perdrez 2 points et observerez un malus de temps d'une seconde. Pour mettre votre jeu en mode difficile, assurez vous que vous n'avez pas encore démarrer une partie et appuyez sur la touche "d" de votre clavier.
     
 -hardcore : Faites vos prières avant de mettre ce mode. Chaque mauvaise réponse est automatiquement pénalisée de 10 points et de 5 secondes.Pour mettre votre jeu en mode hardcore, assurez vous que vous n'avez pas encore démarrer une partie et appuyez sur la touche "d" de votre clavier.
+
+- 'r': la touche R vous permet de rénitialiser les scores enregistés dans le fichier des scores. 
