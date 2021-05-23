@@ -154,7 +154,7 @@ def topscore():
 
 def easy(event):
     """ mets le jeu en difficulté facile """
-    global minus_score, minus_temps, difficulte
+    global bonus_score, bonus_temps, difficulte
     difficulte = "facile"
     message_difficulte.config(text='Difficulté: FACILE')
     bonus_score = 2
