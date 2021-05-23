@@ -23,7 +23,7 @@ racine = tk.Tk()
 racine.geometry('825x433')
 racine.config(bg='gray84')
 racine.title("Jeu de couleurs")
-racine.iconbitmap("icone.ico")
+racine.iconbitmap("Veuillez insérer le chemin du fichier icone.ico")
 
 
 #################################################################  
