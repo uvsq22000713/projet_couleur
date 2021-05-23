@@ -24,7 +24,7 @@ racine = tk.Tk()
 racine.geometry('825x433')
 racine.config(bg='gray84')
 racine.title("Jeu de couleurs")
-racine.iconbitmap('D:\Lucas\L1MPCI\S2\LSIN200\Projets\Couleurs\projet_couleur-1\icone.ico')
+racine.iconbitmap('veuillez mettre ici le chemin vers le fichier icone.ico')
 
 
 #################################################################  
@@ -90,6 +90,9 @@ def temps_restant():
             topscore()
         cpt_temps = 30
         bouton_demarrer["state"] = "normal"
+    elif cpt_temps < 0:
+        reinitialiser()
+        suppr_liste()
 
 def reinitialiser():
     """ Rénitialise le temps et le score du joueur """
@@ -175,10 +178,6 @@ def Couleur(COULEUR, bouton):
                 modif_bouton()
     else:
         ecran.destroy()
-
-    if cpt_temps < 0:
-        reinitialiser()
-        suppr_liste()
 
 def topscore():
     """ Conserve les 10 meilleurs score dans le fichier de sauvegarde des scores """
