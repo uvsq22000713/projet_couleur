@@ -14,4 +14,3 @@ Dans le jeu, vous pourriez choisir votre propre difficulté selon vos envies. Il
 - 'r': la touche R vous permet de rénitialiser les scores enregistés dans le fichier des scores. 
 
 La deuxième version va dans le même principe que la première sauf que les mots seront générés en nombre(entre 2 et 6) et qu'il faut entrer les couleurs dans le bon ordre d'apparition des mots sinon le point ne sera pas validé. Après avoir choisi les couleurs(les couleurs choisi sont les boutons modifiés, et de plus les couleurs seront affichés dans le terminal pour vous simplifier la tâche), appuyez sur n'importe quel bouton pour faire apparaître de nouveaux mots.
- - Même si le temps est écoulé, le score sera toujours incrémenté mais toute modification du score après écoulement du temps ne sera pas pris en compte(erreur devenue une fonctionnalité additionnelle) n'oubliez pas d'appuier sur le bouton 'Démarer pour lancer une autre partie'
