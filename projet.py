@@ -9,6 +9,8 @@
 #https://github.com/uvsq22000713/projet_couleur
 ##################################################
 
+
+from os import truncate
 import tkinter as tk
 import tkinter.font as tkFont
 import random as rd
@@ -22,7 +24,7 @@ racine = tk.Tk()
 racine.geometry('825x433')
 racine.config(bg='gray84')
 racine.title("Jeu de couleurs")
-racine.iconbitmap('veuillez mettre ici le chemin vers le fichier icone.ico')
+racine.iconbitmap('D:\Lucas\L1MPCI\S2\LSIN200\Projets\Couleurs\projet_couleur-1\icone.ico')
 
 
 #################################################################  
@@ -58,7 +60,6 @@ diff = tkFont.Font(family='Baskerville Old Face', size=14)
 bouton = tkFont.Font(family='Arial Black', weight='bold', size=9)
 demarrer_reinitialiser = tkFont.Font(family='Baskerville Old Face', size=13)
 
-
 #################################################################
 #fonctions
 
@@ -81,9 +82,7 @@ def temps_restant():
     
     if cpt_temps == 0:     #remet le compteur à 30 et réactive le bouton démarrer 
         racine.after_cancel(temps_ecoule)
-        verif_temps = False
-        for nom in bouton: #désactive les bouton une fois que le temps est écoulé
-            nom.configure(state=tk.DISABLED)  
+        verif_temps = False  
         print('Votre score est :' + str(cpt_score))  #test
         if difficulte == "normal": # 10 meilleurs score uniquement en difficulté normale
             topscore()
