@@ -16,7 +16,6 @@ import tkinter.font as tkFont
 import random as rd
 from tkinter.constants import LEFT, TRUE
 
-
 ####################################################################
 
 
@@ -110,6 +109,7 @@ def reinitialiser():
     #listes
     suppr_liste()
     modif_bouton()
+    ecran.destroy()
 
 def modif_bouton():
     ''' modifie l'état des boutons '''
@@ -153,27 +153,34 @@ def generateur_mots():
 def Couleur(COULEUR, bouton):
     """ Fonction liés à chaque boutons de couleur """
     global liste_verif, cpt_score, cpt_temps
-    if len(liste_verif) < len(liste_1):        
-        bouton.configure(border=2, highlightbackground='black')
-        liste_verif.append(COULEUR)
-        print(liste_verif)
+    if verif_temps:
+        if len(liste_verif) < len(liste_1):        
+            bouton.configure(border=2, highlightbackground='black')
+            liste_verif.append(COULEUR)
+            print(liste_verif)
 
-    elif len(liste_verif) == len(liste_1):
-        if liste_verif == liste_1:
-            cpt_score += bonus_score
-            message_score.config(text="Score: " + str(cpt_score))
-            cpt_temps += bonus_temps
-            message_temps.configure(text="Temps restant: " + str(cpt_temps) + 's')
-            modif_bouton()
-            suppr_liste()
-            generateur_mots()
-        else:
-            cpt_score -= minus_score
-            cpt_temps -= minus_temps
-            message_temps.configure(text="Temps restant: " + str(cpt_temps) + 's')
-            message_score.config(text="Score: " + str(cpt_score))
-            liste_verif.clear()
-            modif_bouton()
+        elif len(liste_verif) == len(liste_1):
+            if liste_verif == liste_1:
+                cpt_score += bonus_score
+                message_score.config(text="Score: " + str(cpt_score))
+                cpt_temps += bonus_temps
+                message_temps.configure(text="Temps restant: " + str(cpt_temps) + 's')
+                modif_bouton()
+                suppr_liste()
+                generateur_mots()
+            else:
+                cpt_score -= minus_score
+                cpt_temps -= minus_temps
+                message_temps.configure(text="Temps restant: " + str(cpt_temps) + 's')
+                message_score.config(text="Score: " + str(cpt_score))
+                liste_verif.clear()
+                modif_bouton()
+    else:
+        ecran.destroy()
+
+    if cpt_temps < 0:
+        reinitialiser()
+        suppr_liste()
 
 def topscore():
     """ Conserve les 10 meilleurs score dans le fichier de sauvegarde des scores """
