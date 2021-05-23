@@ -1,5 +1,5 @@
 # projet_couleur
-Dans ce jeu, différents noms de couleurs seront affichés avec différentes couleurs de texte. Ici,  dans  ce  jeu,  le  rôle  d'un  joueur  est  de  choisir  la  bonne  couleur  du  mot  qui  s'affiche  à l'écran. Chaque fois que le joueur choisi la bonne couleur, le score sera incrémenté de un. La durée  du  jeu  sera  de 30  secondes  et  les  boutons  de  couleurs  utilisées  dans  ce  jeu  sont le rouge, le bleu, le vert, le rose, le jaune, l’orange et le blanc.
+Dans ce jeu, différents noms de couleurs seront affichés avec différentes couleurs de texte. Ici,  dans  ce  jeu,  le  rôle  d'un  joueur  est  de  choisir  la  bonne  couleur  du  mot  qui  s'affiche  à l'écran. Chaque fois que le joueur choisi la bonne couleur, le score sera incrémenté de un. La durée  du  jeu  sera  de 30  secondes  et  les  boutons  de  couleurs  utilisées  dans  ce  jeu  sont le rouge, le bleu, le vert, le rose, le jaune, l’orange et le blanc. Le jeu se présente en deux version, la première se trouve dans la branche main et la deuxième se situe dans la branche mots complexes
 
 Dans le jeu, vous pourriez choisir votre propre difficulté selon vos envies. Il ya cinq principales difficultés allant de paisible jusqu'à l'horrible mode hardcore:
     
