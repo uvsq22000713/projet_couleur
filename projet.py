@@ -10,7 +10,6 @@
 ##################################################
 
 
-from os import truncate
 import tkinter as tk
 import tkinter.font as tkFont
 import random as rd
