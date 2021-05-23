@@ -82,6 +82,8 @@ def temps_restant():
         bouton_demarrer["state"] = "normal"
         
         mots.configure(text='')
+    elif cpt_temps < 0:
+        reinitialiser()
 
 
 def reinitialiser():
@@ -108,7 +110,9 @@ def generateur_mots():
     else: # a == False, c'est a dire que le temps est écoulé
         mots.configure(text='')
         mot, couleur = '', ''
-
+    
+    if cpt_temps < 0:
+        reinitialiser()
 
 def Couleur(COULEUR):
     """ Fonction liés à chaque boutons de couleur """
@@ -153,8 +157,8 @@ def easy(event):
     global minus_score, minus_temps, difficulte
     difficulte = "facile"
     message_difficulte.config(text='Difficulté: FACILE')
-    minus_score = 2
-    minus_temps = 1
+    bonus_score = 2
+    bonus_temps = 1
 
 def normal(event):
     """ mets le jeu en difficulté normale """
@@ -180,6 +184,11 @@ def hardcore(event):
     minus_score = 10
     minus_temps = 5
 
+def resetScore(event):
+    ''' reinitialise le score du joueur dans le fichier sauvegarde '''
+    fic = open('Sauvegarde_des_scores', 'w')
+    fic.close()
+    print('Scores réinitialisés')
 
 ################################################################################################
 
@@ -257,6 +266,7 @@ racine.bind('e', easy)
 racine.bind('n', normal)
 racine.bind('h', hard)
 racine.bind('d', hardcore)
+racine.bind('r', resetScore)
 
 
 ###############################################################
