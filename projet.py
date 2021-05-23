@@ -9,8 +9,6 @@
 #https://github.com/uvsq22000713/projet_couleur
 ##################################################
 
-
-from os import truncate
 import tkinter as tk
 import tkinter.font as tkFont
 import random as rd
@@ -59,6 +57,7 @@ texte_1 = tkFont.Font(family='Baskerville Old Face', size=19, weight='bold')
 diff = tkFont.Font(family='Baskerville Old Face', size=14)
 bouton = tkFont.Font(family='Arial Black', weight='bold', size=9)
 demarrer_reinitialiser = tkFont.Font(family='Baskerville Old Face', size=13)
+
 
 #################################################################
 #fonctions
