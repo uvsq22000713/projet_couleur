@@ -46,9 +46,7 @@ compteur = 0
     #bool
 verif_temps = True
 
-
-
-
+    #autre
 cpt = 0
 mini_liste=[]
 liste_verif = []
